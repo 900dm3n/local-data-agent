@@ -1,0 +1,6 @@
+{
+  "provider": "mimo",
+  "model": "YOUR_MODEL_ID",
+  "api_mode": "chat",
+  "base_url": "https://api.xiaomimimo.com/v1"
+}

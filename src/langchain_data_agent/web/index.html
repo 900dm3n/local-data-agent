@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Data Workspace · 本地数据分析</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="/"><span class="brand-mark">D</span><span>Data Workspace<small>本地 Data Agent</small></span></a>
+  <div class="side-heading">分析记录 <button id="refresh" class="icon-button" aria-label="刷新">↻</button></div>
+  <div id="run-list" class="run-list"><p class="muted">正在连接本地工作区…</p></div>
+  <div class="side-footer"><span class="dot"></span> 数据与计算留在本机<small>模型使用已配置的官方 API</small></div>
+</aside>
+<main>
+  <header><div><div class="eyebrow">LOCAL ANALYTICS / V1</div><h1>从问题出发，让结论有据可查。</h1><p class="muted">管理数据、运行分析，沿着表格和证据检查每一个结果。</p></div><span class="local-badge">◉ 本地工作区</span></header>
+  <section class="overview" aria-label="工作区概况"><div><span>已注册数据集</span><strong id="dataset-count">—</strong></div><div><span>已完成分析</span><strong id="run-count">—</strong></div><div><span>排队 / 执行中</span><strong id="job-count">—</strong></div><div><span>模型接入</span><strong id="model-state" class="small-stat">检查中</strong></div></section>
+  <section class="card compose"><div class="section-title"><div><h2>开始一次分析</h2><p class="muted">当前业务口径：现金净额；金额按成功支付和成功退款的各自事件月计算。</p></div><button id="dataset-manage" class="secondary">管理数据</button></div>
+    <form id="analysis-form"><div class="form-row"><label>数据集<select id="fixture" required></select></label><label>运行方式<select id="mode"><option value="replay">离线演示 · 预设动作</option><option value="live">真实模型 · API</option></select></label><label id="case-label">演示场景<select id="case"><option value="cash-net-v1">完整分析</option><option value="repair">错误修复</option><option value="clarification">澄清业务口径</option><option value="budget">预算停止</option></select></label></div>
+    <label for="question" class="sr-only">分析问题</label><textarea id="question" rows="3" maxlength="8000" required>按现金净额口径比较2026年8月和9月，列出支付、退款、净额，并分析变化。</textarea>
+    <div class="compose-bottom"><p id="mode-note" class="muted">离线演示使用固定协议验证执行链路，不评价自主分析能力。</p><button id="start-analysis" type="submit">开始分析 <span aria-hidden="true">↗</span></button></div></form>
+    <div id="empty-data" hidden class="empty-inline">还没有数据集。<button id="create-demo" class="text-button">创建离线演示数据</button>，或导入你自己的兼容数据包。</div>
+  </section>
+  <section id="jobs-section" class="card" hidden><div class="section-title"><h2>任务进度</h2><span class="muted">关闭网页不影响后台任务</span></div><div id="jobs"></div></section>
+  <section id="run-section" class="card" hidden>
+    <div class="section-title"><div><div class="eyebrow">ANALYSIS</div><h2 id="run-title"></h2><div id="run-meta" class="meta"></div></div><a id="export-run" class="secondary download" href="#">下载审计包 ↓</a></div>
+    <div id="run-alert" class="notice" hidden></div>
+    <nav class="tabs" aria-label="分析详情"><button data-tab="report" class="active">分析结果</button><button data-tab="tables">结果表</button><button data-tab="plan">执行计划</button><button data-tab="events">验证与轨迹</button><button data-tab="usage">调用与用量</button></nav>
+    <div id="tab-report" class="tab-panel"><div class="publication-picker"><label>历史报告<select id="publication"></select></label></div><div id="report" class="report-content"></div></div>
+    <div id="tab-tables" class="tab-panel" hidden><div id="artifact-list" class="artifact-list"></div><div id="artifact-preview"></div></div>
+    <div id="tab-plan" class="tab-panel" hidden></div><div id="tab-events" class="tab-panel" hidden></div><div id="tab-usage" class="tab-panel" hidden></div>
+    <form id="continue-form" class="continue-box" hidden><label id="continue-label" for="continue-text">继续追问</label><div class="continue-input"><input id="continue-text" maxlength="8000" required placeholder="例如：只看官网渠道，复用已有结果"><button type="submit">继续分析</button></div></form>
+    <div id="resume-box" class="continue-box" hidden><span>保留已有快照与产物，继续尚未完成的运行。</span><button id="resume-run" class="secondary">从检查点继续</button></div>
+    <div id="approve-box" class="continue-box" hidden><p>该运行尚未绑定已批准口径。你可以通过 CLI 批准，或明确批准本次采用 CASH_NET_v1 后再回答澄清。</p><label>批准人<input id="approver" placeholder="填写你的名字"></label><button id="approve-metric" class="secondary">明确批准现金净额口径</button></div>
+    <div id="memory-box" class="continue-box" hidden><p>本次产生一张记忆草稿，仅包含计划和口径，不包含可跨快照复用的金额。批准后才会用于相同数据集和指标。</p><label>批准人<input id="memory-approver" placeholder="填写你的名字"></label><button id="approve-memory" class="secondary">批准此记忆草稿</button></div>
+  </section>
+  <section id="welcome" class="welcome"><div class="welcome-symbol">⌘</div><h2>一次分析，一条可追溯的链路。</h2><p>注册数据 → 确认口径 → 执行计划 → 核验金额 → 查看报告</p><p class="muted">选择左侧分析记录，或从上方开始。本地执行无需托管平台。</p></section>
+  <footer>LangChain + LangGraph · SQLite / DuckDB / Parquet <span>模型服务不可用时，离线演示仍可运行。</span></footer>
+</main>
+<dialog id="dataset-dialog"><div class="section-title"><div><div class="eyebrow">DATA CATALOG</div><h2>数据集管理</h2></div><button id="close-datasets" class="icon-button" aria-label="关闭">×</button></div><div id="datasets"></div><details><summary>查看表结构与业务口径</summary><pre id="dataset-schema">点击数据集的“查看结构”</pre></details>
+  <div class="dialog-grid"><form id="generate-form"><h3>生成较大合成数据</h3><label>数据集名称<input id="generate-fixture" required pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,63}" placeholder="例如 finance-demo-v2"></label><label>数据分布<select id="generate-profile"><option value="baseline">常规分布</option><option value="empty-base">零基期</option><option value="channel-gap">渠道缺期</option></select></label><label>随机种子<input id="generate-seed" type="number" min="0" max="2147483647" value="73" required></label><p class="muted">12,000 订单 · 600 工单 · 60 文档 · 24 张表。合成数据，不代表生产数据。</p><button type="submit">生成数据</button></form>
+  <form id="import-form"><h3>导入本地数据包</h3><label>新数据集名称<input id="import-fixture" required pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,63}"></label><label>registry.json 完整路径<input id="import-path" required placeholder="D:\data\finance\registry.json"></label><p class="muted">包内声明 SQLite / CSV / Parquet / JSONL 和文档。验证现金净额源契约后复制到工作区，原文件保持不变。</p><button type="submit">验证并导入</button></form></div>
+</dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+</body></html>

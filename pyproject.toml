@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-data-agent-langchain"
+version = "0.2.1"
+description = "Independent LangChain Data Agent with a local verified SQL and evidence core"
+requires-python = ">=3.12"
+dependencies = [
+  "langchain>=1,<2", "langchain-deepseek>=1,<2", "langchain-openai>=1,<2", "langgraph-checkpoint-sqlite>=3,<4",
+  "pydantic>=2.10,<3", "duckdb>=1.2,<2", "sqlglot>=26,<40",
+  "pyarrow>=19,<30", "tzdata>=2025.1", "openai>=2,<3"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+data-agent-lc = "langchain_data_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+langchain_data_agent = ["web/*.html", "web/*.css", "web/*.js"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

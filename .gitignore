@@ -1,0 +1,43 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+config.local.json
+*secret*
+*credential*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+# Local execution, data, checkpoints, reports, and request traces
+var/
+data/
+datasets/
+runtime/
+artifacts/
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.db-*
+*.parquet
+*.csv
+*.jsonl
+*.zip
+# Environments and generated packages
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+pytest-cache-files-*/
+*.egg-info/
+build/
+dist/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
